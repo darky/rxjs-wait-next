@@ -9,7 +9,7 @@ test('basic', async () => {
   wns(sub.pipe(mergeMap(async n => n + 1)))
   wns(sub.pipe(mergeMap(async n => n.toString())))
 
-  const [n1, ns] = await wnw<number | string, number>(sub, 0)
+  const [n1, ns] = await wnw(sub, 0)
   assert.strictEqual(n1, 1)
   assert.strictEqual(ns, '0')
 })
@@ -26,5 +26,5 @@ test('error', async () => {
     )
   )
 
-  await assert.rejects(() => wnw<number | string, number>(sub, 0), new Error('err-test'))
+  await assert.rejects(() => wnw(sub, 0), new Error('err-test'))
 })

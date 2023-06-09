@@ -4,12 +4,12 @@ import { diDep, diInit, diSet } from 'ts-fp-di'
 const RXJS_WAIT_NEXT_RESOLVE = 'rxjs-wait-next-resolve'
 const RXJS_WAIT_NEXT_REJECT = 'rxjs-wait-next-reject'
 
-export const rxjsWaitNextWrap = async <T, V>(subject: Subject<V>, value: V): Promise<T[]> => {
+export const rxjsWaitNextWrap = async <V>(subject: Subject<V>, value: V): Promise<unknown[]> => {
   return await diInit(async () => {
-    return await new Promise<T[]>(async (resolve, reject) => {
-      let resp: T[] = []
+    return await new Promise(async (resolve, reject) => {
+      let resp: unknown[] = []
       let calls = 0
-      diSet(RXJS_WAIT_NEXT_RESOLVE, (respItem: T) => {
+      diSet(RXJS_WAIT_NEXT_RESOLVE, (respItem: unknown) => {
         calls++
         resp.push(respItem)
         if (calls === subject.observers.length) {
