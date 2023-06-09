@@ -13,3 +13,18 @@ test('basic', async () => {
   assert.strictEqual(n1, 1)
   assert.strictEqual(ns, '0')
 })
+
+test('error', async () => {
+  const sub = new Subject<number>()
+
+  wns(sub.pipe(mergeMap(async n => n + 1)))
+  wns(
+    sub.pipe(
+      mergeMap(async () => {
+        throw new Error('err-test')
+      })
+    )
+  )
+
+  await assert.rejects(() => wnw<number | string, number>(sub, 0), new Error('err-test'))
+})
