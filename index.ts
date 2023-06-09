@@ -4,7 +4,7 @@ import { diDep, diInit, diSet } from 'ts-fp-di'
 const RXJS_WAIT_NEXT_RESOLVE = 'rxjs-wait-next-resolve'
 const RXJS_WAIT_NEXT_REJECT = 'rxjs-wait-next-reject'
 
-export const rxjsWaitNextWrap = async <V>(subject: Subject<V>, value: V): Promise<unknown[]> => {
+export const callSubject = async <V>(subject: Subject<V>, value: V): Promise<unknown[]> => {
   return await diInit(async () => {
     return await new Promise(async (resolve, reject) => {
       let resp: unknown[] = []
@@ -22,11 +22,7 @@ export const rxjsWaitNextWrap = async <V>(subject: Subject<V>, value: V): Promis
   })
 }
 
-export const rxjsWaitNextSubscribe = <T>(
-  observable: Observable<T>,
-  observer?: Observer<T>,
-  needThrow = false
-): Subscription => {
+export const subscribe = <T>(observable: Observable<T>, observer?: Observer<T>, needThrow = false): Subscription => {
   return observable
     .pipe(
       catchError((err, caught) => {
@@ -51,6 +47,3 @@ export const rxjsWaitNextSubscribe = <T>(
       },
     })
 }
-
-export const wnw = rxjsWaitNextWrap
-export const wns = rxjsWaitNextSubscribe
