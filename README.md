@@ -1,6 +1,7 @@
 # rxjs-wait-next
 
-Wait RxJS Subject.next emition for all subscribers
+Wait RxJS Subject.next emition for all subscribers<br/>
+Works on Node.js only
 
 ## Example
 
