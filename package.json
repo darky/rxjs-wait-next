@@ -1,0 +1,39 @@
+{
+  "name": "rxjs-wait-next",
+  "version": "0.0.0",
+  "description": "Wait RxJS Subject.next emition for all subscribers",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:darky/rxjs-wait-next.git"
+  },
+  "keywords": [
+    "rxjs",
+    "subject",
+    "wait",
+    "next"
+  ],
+  "scripts": {
+    "clean": "rm -rf dist",
+    "build": "npm run clean && tsc",
+    "prepublishOnly": "npm run build",
+    "test": "npm run build && node --test dist/test.js",
+    "test:dev": "node -r ts-node/register/transpile-only test.ts"
+  },
+  "files": [
+    "dist/index.js",
+    "dist/index.d.ts"
+  ],
+  "author": "Vladislav Botvin",
+  "license": "MIT",
+  "dependencies": {
+    "rxjs": "^7.8.1",
+    "ts-fp-di": "^0.12.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.2.5",
+    "ts-node": "^10.9.1",
+    "typescript": "5.1.3"
+  }
+}
