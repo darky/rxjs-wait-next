@@ -72,3 +72,14 @@ test('observer error', async () => {
     assert.strictEqual(e, err)
   }
 })
+
+test('sequential', async () => {
+  const subj = new Subject<number>()
+
+  const [inc$] = subscribe(subj.pipe(mergeMap(async n => n + 1)))
+  subscribe(inc$.pipe(mergeMap(async n => n.toString())))
+
+  const [num, str] = await callSubject(subj, 0)
+  assert.strictEqual(num, 1)
+  assert.strictEqual(str, '1')
+})
