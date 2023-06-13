@@ -1,7 +1,6 @@
 # rxjs-wait-next
 
 Wait RxJS Subject.next emition for all subscribers<br/>
-Works on Node.js only
 
 ## Example
 
@@ -15,3 +14,8 @@ subscribe(subj.pipe(mergeMap(async n => n + 1)))
 const [num] = await callSubject(subj, 0)
 num // 1
 ```
+
+## Limitation
+
+* Works on Node.js only, it's uses `AsyncLocalStorage`
+* You should avoid operators, which can omit `subscribe` call, like `filter`, `partition` and so on
