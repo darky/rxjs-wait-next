@@ -28,8 +28,10 @@ export const subscribe = <T>(observable: Observable<T>, observer?: Partial<Obser
       diDep<(value: unknown) => void>(RXJS_WAIT_NEXT_REJECT)(err)
       return caught
     }),
-    tap(value => diDep<(value: T) => void>(RXJS_WAIT_NEXT_RESOLVE)(value)),
+    tap(value => resolveSubscription(value)),
     share()
   )
   return [obs, obs.subscribe(observer)] as const
 }
+
+export const resolveSubscription = (value: unknown) => diDep<(value: unknown) => void>(RXJS_WAIT_NEXT_RESOLVE)(value)

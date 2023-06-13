@@ -1,7 +1,7 @@
 import test from 'node:test'
 import assert from 'node:assert'
-import { callSubject, subscribe } from './index'
-import { Subject, mergeMap } from 'rxjs'
+import { callSubject, resolveSubscription, subscribe } from './index'
+import { Subject, filter, mergeMap } from 'rxjs'
 
 test('response', async () => {
   const subj = new Subject<number>()
@@ -100,4 +100,37 @@ test('each subscribe returns hot observable', async () => {
 
   await callSubject(subj, 0)
   assert.strictEqual(called, 1)
+})
+
+test('filter not stuck via resolveSubscription', async () => {
+  const subj = new Subject<number>()
+
+  subscribe(
+    subj.pipe(
+      filter(n => {
+        const resp = n > 10
+        if (!resp) {
+          resolveSubscription(void 0)
+        }
+        return resp
+      })
+    )
+  )
+  const [empty] = await callSubject(subj, 5)
+  assert.strictEqual(empty, void 0)
+})
+
+test('filter not stuck via truth predicate', async () => {
+  const subj = new Subject<number>()
+
+  subscribe(
+    subj.pipe(
+      filter(n => {
+        const resp = n > 10
+        return resp
+      })
+    )
+  )
+  const [n] = await callSubject(subj, 15)
+  assert.strictEqual(n, 15)
 })
