@@ -1,4 +1,4 @@
-import { Observable, Observer, Subject, catchError, share } from 'rxjs'
+import { Observable, Observer, Subject, catchError, share, tap } from 'rxjs'
 import { diDep, diInit, diSet } from 'ts-fp-di'
 
 const RXJS_WAIT_NEXT_RESOLVE = 'rxjs-wait-next-resolve'
@@ -28,21 +28,8 @@ export const subscribe = <T>(observable: Observable<T>, observer?: Partial<Obser
       diDep<(value: unknown) => void>(RXJS_WAIT_NEXT_REJECT)(err)
       return caught
     }),
+    tap(value => diDep<(value: T) => void>(RXJS_WAIT_NEXT_RESOLVE)(value)),
     share()
   )
-  return [
-    obs,
-    obs.subscribe({
-      next(value) {
-        observer?.next?.call(this, value)
-        diDep<(value: T) => void>(RXJS_WAIT_NEXT_RESOLVE)(value)
-      },
-      error(err) {
-        observer?.error?.call(this, err)
-      },
-      complete() {
-        observer?.complete?.call(this)
-      },
-    }),
-  ] as const
+  return [obs, obs.subscribe(observer)] as const
 }
