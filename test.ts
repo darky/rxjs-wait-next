@@ -83,3 +83,21 @@ test('sequential', async () => {
   assert.strictEqual(num, 1)
   assert.strictEqual(str, '1')
 })
+
+test('each subscribe returns hot observable', async () => {
+  let called = 0
+  const subj = new Subject<number>()
+
+  const [inc$] = subscribe(
+    subj.pipe(
+      mergeMap(async n => {
+        called++
+        return n + 1
+      })
+    )
+  )
+  subscribe(inc$.pipe(mergeMap(async n => n.toString())))
+
+  await callSubject(subj, 0)
+  assert.strictEqual(called, 1)
+})
