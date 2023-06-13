@@ -2,20 +2,25 @@
 
 Wait RxJS Subject.next emition for all subscribers<br/>
 
-## Example
+## How it works
 
-```ts
-import { callSubject, subscribe } from 'rxjs-wait-next'
-import { Subject, mergeMap } from 'rxjs'
+**rxjs-wait-next** listens all subscriptions emissions:
 
-const subj = new Subject<number>()
-subscribe(subj.pipe(mergeMap(async n => n + 1)))
+https://github.com/darky/rxjs-wait-next/blob/a06f0dde942be5ff081f0dadb66484edddcb59bb/index.ts#L27-L31
 
-const [num] = await callSubject(subj, 0)
-num // 1
-```
+When all emissions happens, it's resolved:
+
+https://github.com/darky/rxjs-wait-next/blob/a06f0dde942be5ff081f0dadb66484edddcb59bb/index.ts#L12-L17
+
+Some operators, like `filter`, may interfere to emissions happens. <br/>
+Need to use manual emission in this case: 
+
+https://github.com/darky/rxjs-wait-next/blob/a06f0dde942be5ff081f0dadb66484edddcb59bb/test.ts#L105-L121
+
+## Examples
+
+See https://github.com/darky/rxjs-wait-next/blob/master/test.ts
 
 ## Limitation
 
 * Works on Node.js only, it's uses `AsyncLocalStorage`
-* You should avoid operators, which can omit `subscribe` call, like `filter`, `partition` and so on
