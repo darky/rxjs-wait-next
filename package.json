@@ -1,6 +1,6 @@
 {
   "name": "rxjs-wait-next",
-  "version": "0.0.19",
+  "version": "0.0.22",
   "description": "Wait RxJS Subject.next emition for all subscribers",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
