@@ -1,7 +1,7 @@
 import test from 'node:test'
 import assert from 'node:assert'
 import { callSubject, resolveSubscription, subscribe } from './index'
-import { Subject, filter, mergeMap } from 'rxjs'
+import { Subject, filter, map, mergeMap } from 'rxjs'
 
 test('response', async () => {
   const subj = new Subject<number>()
@@ -133,4 +133,12 @@ test('filter not stuck via truth predicate', async () => {
   )
   const [n] = await callSubject(subj, 15)
   assert.strictEqual(n, 15)
+})
+
+test('array compile time error', async () => {
+  const subj = new Subject<number>()
+
+  const arr$ = subj.pipe(map(n => [n]))
+  // @ts-expect-error
+  subscribe(arr$)
 })

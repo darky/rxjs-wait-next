@@ -26,7 +26,10 @@ export const callSubject = async <V>(subject: Subject<V>, value: V): Promise<unk
   })
 }
 
-export const subscribe = <T>(observable: Observable<T>, observer?: Partial<Observer<T>>) => {
+export function subscribe<T>(
+  observable: Observable<T extends Array<any> ? never : T>,
+  observer?: Partial<Observer<T>>
+) {
   calcSubjectCalls(observable)
   const obs = observable.pipe(
     catchError((err, caught) => {
